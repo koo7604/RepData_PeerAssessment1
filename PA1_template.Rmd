@@ -3,7 +3,7 @@
 ## Loading and preprocessing the data
 ```{r, echo=TRUE}
 # Set working directory
-setwd("/Users/koo7604/Desktop/R/Johns_Hopkins/ReproducibleResearch/week2/RepData_PeerAssessment1")
+setwd("/Users/koo7604/Desktop/R/Johns_Hopkins/ReproducibleResearch/peer1/RepData_PeerAssessment1")
 # Load packages
 library(knitr)
 library(markdown)
@@ -71,11 +71,13 @@ for (i in 1:maxrow) {DT[i,4] <-
 colnames(DT) <- c(colnames(DT[1]),colnames(DT[2]), colnames(DT[3]), "weekend")
 
 # Calculate average steps for all weekend days
-DTend <- aggregate(DTend$steps, by=list(DTend$interval), FUN=mean, subset=subset(DT, DT$weekend=="weekend"))
+DTend <- subset(DT, DT$weekend=="weekend")
+DTend <- aggregate(DTend$steps, by=list(DTend$interval), FUN=mean)
 colnames(DTend) <- c("interval", "avenumsteps")
 
 # Calculate average steps for all weekday days
-DTday <- aggregate(DTday$steps, by=list(DTday$interval), FUN=mean, subset = subset(DT, DT$weekend=="weekday"))
+DTday <- subset(DT, DT$weekend=="weekday")
+DTday <- aggregate(DTday$steps, by=list(DTday$interval), FUN=mean)
 colnames(DTday) <- c("interval", "avenumsteps")
 
 # Combine
@@ -83,7 +85,7 @@ DT3 <- cbind(DTend, DTday$avenumsteps)
 colnames(DT3) <- c("interval", "weekend", "weekday")
 
 # Transform tp time series data
-DT3 <- ts(DT3[,2:3], start=0, frequency = 1)
+DT3 <- ts(DT3[,2:3])
 
 # Plot time series
 library(lattice)
